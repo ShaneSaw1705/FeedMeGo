@@ -1,0 +1,10 @@
+{{define "toast"}}
+<script>
+	UIkit.notification({
+		message: "{{.message}}",
+		status: "{{.status}}",
+		pos: "bottom-right",
+		timeout: 5000,
+	});
+</script>
+{{end}}

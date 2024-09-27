@@ -1,0 +1,17 @@
+{{define "children"}}
+<div class='w-screen h-screen flex items-center justify-center'>
+	<style>
+		.htmx-request {
+			opacity: 1;
+			position: relative;
+			padding: 5px;
+		}
+	</style>
+	<button hx-post="." hx-target="#target" hx-swap="innerHTML" hx-indicator="#indicator" hx-disabled-elt="this"
+		class="uk-button uk-button-primary">toast<div id='indicator' class="htmx-indicator absolute" uk-spinner>
+		</div>
+	</button>
+	<div id="target">
+	</div>
+</div>
+{{end}}
