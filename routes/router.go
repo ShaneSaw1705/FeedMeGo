@@ -12,4 +12,9 @@ func RegisterRoutes(r *gin.Engine) {
 		landingpage.GET("/", controllers.HandleLandingPage(r))
 		landingpage.POST("/", controllers.HandleTestToast(r))
 	}
+	auth := r.Group("/auth")
+	{
+		auth.GET("/", controllers.HandleLoginPage(r))
+		auth.POST("/", controllers.HandleLoginLogic(r))
+	}
 }

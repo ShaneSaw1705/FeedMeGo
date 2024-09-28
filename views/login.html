@@ -1,0 +1,31 @@
+{{define "children"}}
+<div class="h-screen w-screen flex items-center justify-center">
+	<style>
+		.htmx-request {
+			opacity: 1;
+			position: relative;
+			padding: 5px;
+		}
+	</style>
+	<div class="uk-card">
+		<div class="uk-card-header">
+			<h3 class="uk-card-title">Login</h3>
+			<p class="uk-margin-xsmall-top uk-text-small text-muted-foreground">Please enter your email...</p>
+		</div>
+		<div class="uk-card-body">
+			<!-- Fixed the hx-indicator attribute's closing quote -->
+			<form hx-post="." hx-target="#target" hx-swap="innerHtml" hx-indicator="#indicator"
+				hx-disabled-elt="#submit" class="flex flex-col gap-2">
+
+				<input class="uk-input" type="email" name="email" placeholder="example@email.com" required />
+				<button id="submit" class="uk-button uk-button-primary" type="submit">
+					Login
+					<div id='indicator' class="htmx-indicator absolute" uk-spinner>
+					</div>
+				</button>
+			</form>
+		</div>
+	</div>
+	<div id="target"></div>
+</div>
+{{end}}

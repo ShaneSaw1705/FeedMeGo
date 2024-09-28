@@ -10,8 +10,7 @@ import (
 
 func HandleLandingPage(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		r.LoadHTMLFiles("templates/base.html", "views/index.html")
-		templ, err := template.New("").ParseFiles("./views/index.html", "./templates/base.html")
+		templ, err := template.New("landingpage").ParseFiles("views/index.html", "templates/base.html")
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"Error": "Error parsing html files"})
 		}
