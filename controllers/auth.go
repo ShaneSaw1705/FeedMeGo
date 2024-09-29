@@ -121,7 +121,7 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 
 func createAuthToken(user models.UserModel, c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user,
+		"sub": user.ID,
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	})
 
