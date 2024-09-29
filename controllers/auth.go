@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"feed-me/services"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -35,7 +36,7 @@ func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 		r.LoadHTMLFiles("templates/toast.html")
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"sub": body.Email,
-			"exp": time.Now().Add(time.Hour * 24).Unix(),
+			"exp": time.Now().Add(time.Hour * 1).Unix(),
 		})
 
 		tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
@@ -43,8 +44,18 @@ func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 			c.JSON(http.StatusFailedDependency, gin.H{
 				"Error": "failed to create jwt token",
 			})
+			return
 		}
 		fmt.Println(tokenString)
+		err = services.SendMagicLink(body.Email, tokenString)
+		if err != nil {
+			fmt.Println(err)
+			c.HTML(200, "toast", gin.H{
+				"message": "<uk-icon icon='rocket'></uk-icon> Magic failed to send to: " + body.Email,
+				"status":  "primary",
+			})
+			return
+		}
 		c.HTML(200, "toast", gin.H{
 			"message": "<uk-icon icon='rocket'></uk-icon> Magic link sent to: " + body.Email,
 			"status":  "primary",
