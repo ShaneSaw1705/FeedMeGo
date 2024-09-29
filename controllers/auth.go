@@ -111,9 +111,27 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 					return
 				}
 			}
-			//TODO: Set jwt cookie
+			//TODO: Create new auth jwt
+			createAuthToken(User, c)
 		}
 		c.JSON(200, "looks good to me :)")
 		return
 	}
+}
+
+func createAuthToken(user models.UserModel, c *gin.Context) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": user,
+		"exp": time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	if err != nil {
+		c.JSON(http.StatusFailedDependency, gin.H{
+			"Error": "failed to create jwt token",
+		})
+		return
+	}
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("auth", tokenString, 3600*24, "", "", false, true)
 }
