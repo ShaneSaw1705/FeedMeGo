@@ -79,11 +79,9 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
 
-			// Return the secret key for validation
 			return []byte(os.Getenv("SECRET")), nil
 		})
 		if err != nil {
-			// Redirect to the login page if token parsing fails
 			c.JSON(http.StatusBadRequest, "Error parsing jwt tooken")
 			return
 		}
@@ -94,16 +92,24 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 				c.JSON(http.StatusBadRequest, "This link is expired please try again")
 				return
 			}
+			// bind jwt email
 			sub, ok := claims["sub"].(string)
 			if !ok {
-				c.JSON(http.StatusBadRequest, "Invalid token claims")
+				c.JSON(http.StatusBadRequest, "unable to assert email")
 				return
 			}
+			// init User
 			var User models.UserModel
-			initializers.DB.First(&User, "email = ?", sub)
+			// check if it exists
+			initializers.DB.Where("email = ?", sub).First(&User)
+			// if not exists assign the email and create a database entry
 			if User.ID == 0 {
 				User.Email = sub
-				initializers.DB.Create(&User)
+				res := initializers.DB.Create(&User)
+				if res.Error != nil {
+					c.JSON(http.StatusFailedDependency, "Failed to create database entry")
+					return
+				}
 			}
 			//TODO: Set jwt cookie
 		}
