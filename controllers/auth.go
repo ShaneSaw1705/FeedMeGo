@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"feed-me/initializers"
+	"feed-me/models"
 	"feed-me/services"
 	"fmt"
 	"html/template"
@@ -92,7 +94,18 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 				c.JSON(http.StatusBadRequest, "This link is expired please try again")
 				return
 			}
-
+			sub, ok := claims["sub"].(string)
+			if !ok {
+				c.JSON(http.StatusBadRequest, "Invalid token claims")
+				return
+			}
+			var User models.UserModel
+			initializers.DB.First(&User, "email = ?", sub)
+			if User.ID == 0 {
+				User.Email = sub
+				initializers.DB.Create(&User)
+			}
+			//TODO: Set jwt cookie
 		}
 		c.JSON(200, "looks good to me :)")
 		return
