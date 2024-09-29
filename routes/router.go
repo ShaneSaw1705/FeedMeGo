@@ -16,5 +16,6 @@ func RegisterRoutes(r *gin.Engine) {
 	{
 		auth.GET("/", controllers.HandleLoginPage(r))
 		auth.POST("/", controllers.HandleLoginLogic(r))
+		auth.GET("/verify", controllers.HandleVerify(r))
 	}
 }

@@ -62,3 +62,39 @@ func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 		})
 	}
 }
+
+func HandleVerify(r *gin.Engine) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tokenString := c.Query("token")
+		if tokenString == "" {
+			c.JSON(http.StatusBadRequest, "Failed to load token")
+			return
+		}
+
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			// Ensure the signing method is what you expect
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			}
+
+			// Return the secret key for validation
+			return []byte(os.Getenv("SECRET")), nil
+		})
+		if err != nil {
+			// Redirect to the login page if token parsing fails
+			c.JSON(http.StatusBadRequest, "Error parsing jwt tooken")
+			return
+		}
+
+		if claims, ok := token.Claims.(jwt.MapClaims); ok {
+			// Check token expiration
+			if float64(time.Now().Unix()) > claims["exp"].(float64) {
+				c.JSON(http.StatusBadRequest, "This link is expired please try again")
+				return
+			}
+
+		}
+		c.JSON(200, "looks good to me :)")
+		return
+	}
+}
