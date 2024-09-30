@@ -12,6 +12,10 @@
 		class="uk-button uk-button-primary">toast<div id='indicator' class="htmx-indicator absolute" uk-spinner>
 		</div>
 	</button>
+	<button hx-post="/logout" hx-swap="none" hx-trigger='click' hx-on="htmx:afterRequest: location.reload()"
+		class='uk-button uk-button-danger'>
+		log out
+	</button>
 	<div id="target">
 	</div>
 </div>

@@ -67,6 +67,7 @@ func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 
 func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		r.LoadHTMLFiles("views/error.html")
 		tokenString := c.Query("token")
 		if tokenString == "" {
 			c.JSON(http.StatusBadRequest, "Failed to load token")
@@ -89,7 +90,7 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 		if claims, ok := token.Claims.(jwt.MapClaims); ok {
 			// Check token expiration
 			if float64(time.Now().Unix()) > claims["exp"].(float64) {
-				c.JSON(http.StatusBadRequest, "This link is expired please try again")
+				c.HTML(http.StatusUnauthorized, "error", gin.H{"Error": "This link is expired please try again"})
 				return
 			}
 			// bind jwt email
@@ -113,7 +114,7 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 			}
 			createAuthToken(User, c)
 		}
-		c.JSON(200, "looks good to me :)")
+		c.Redirect(http.StatusFound, "/")
 		return
 	}
 }
