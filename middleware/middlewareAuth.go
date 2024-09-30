@@ -16,6 +16,7 @@ func CheckJwt(c *gin.Context) {
 	tokenString, err := c.Cookie("auth")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, "Youre not authorized to access this content")
+		c.Abort()
 		return
 	}
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -27,11 +28,13 @@ func CheckJwt(c *gin.Context) {
 	})
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, "Youre not authorized to access this content")
+		c.Abort()
 		return
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.JSON(http.StatusUnauthorized, "Youre authorization has expired please log in again")
+			c.Abort()
 			return
 		}
 		var user models.UserModel
@@ -39,6 +42,7 @@ func CheckJwt(c *gin.Context) {
 		fmt.Println(claims["sub"])
 		if user.ID == 0 {
 			c.JSON(http.StatusBadRequest, "unable to find an asocciated user")
+			c.Abort()
 			return
 		}
 		c.Set("user", user)
