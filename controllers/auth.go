@@ -111,7 +111,6 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 					return
 				}
 			}
-			//TODO: Create new auth jwt
 			createAuthToken(User, c)
 		}
 		c.JSON(200, "looks good to me :)")
