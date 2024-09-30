@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"feed-me/initializers"
+	"feed-me/models"
 	"feed-me/services"
 	"fmt"
 	"html/template"
@@ -77,11 +79,9 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
 
-			// Return the secret key for validation
 			return []byte(os.Getenv("SECRET")), nil
 		})
 		if err != nil {
-			// Redirect to the login page if token parsing fails
 			c.JSON(http.StatusBadRequest, "Error parsing jwt tooken")
 			return
 		}
@@ -92,9 +92,45 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 				c.JSON(http.StatusBadRequest, "This link is expired please try again")
 				return
 			}
-
+			// bind jwt email
+			sub, ok := claims["sub"].(string)
+			if !ok {
+				c.JSON(http.StatusBadRequest, "unable to assert email")
+				return
+			}
+			// init User
+			var User models.UserModel
+			// check if it exists
+			initializers.DB.Where("email = ?", sub).First(&User)
+			// if not exists assign the email and create a database entry
+			if User.ID == 0 {
+				User.Email = sub
+				res := initializers.DB.Create(&User)
+				if res.Error != nil {
+					c.JSON(http.StatusFailedDependency, "Failed to create database entry")
+					return
+				}
+			}
+			createAuthToken(User, c)
 		}
 		c.JSON(200, "looks good to me :)")
 		return
 	}
+}
+
+func createAuthToken(user models.UserModel, c *gin.Context) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": user.ID,
+		"exp": time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	if err != nil {
+		c.JSON(http.StatusFailedDependency, gin.H{
+			"Error": "failed to create jwt token",
+		})
+		return
+	}
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("auth", tokenString, 3600*24, "", "", false, true)
 }

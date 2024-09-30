@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"feed-me/helpers"
 	"net/http"
 	"text/template"
 	"time"
@@ -10,11 +11,19 @@ import (
 
 func HandleLandingPage(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		user, err := helpers.GetCurrentUser(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, err)
+			return
+		}
 		templ, err := template.New("landingpage").ParseFiles("views/index.html", "templates/base.html")
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"Error": "Error parsing html files"})
 		}
-		templ.ExecuteTemplate(c.Writer, "base", gin.H{"Title": "Hello World"})
+		templ.ExecuteTemplate(c.Writer, "base", gin.H{
+			"Title":     "Home",
+			"useremail": user.Email,
+		})
 	}
 }
 
