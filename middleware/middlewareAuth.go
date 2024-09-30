@@ -15,7 +15,7 @@ import (
 func CheckJwt(c *gin.Context) {
 	tokenString, err := c.Cookie("auth")
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, "Youre not authorized to access this content")
+		c.HTML(http.StatusUnauthorized, "error", gin.H{"Error": "Youre not authorized to access this content"})
 		c.Abort()
 		return
 	}
@@ -27,7 +27,7 @@ func CheckJwt(c *gin.Context) {
 		return []byte(os.Getenv("SECRET")), nil
 	})
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, "Youre not authorized to access this content")
+		c.HTML(http.StatusUnauthorized, "error", gin.H{"Error": "Youre not authorized to access this content"})
 		c.Abort()
 		return
 	}
