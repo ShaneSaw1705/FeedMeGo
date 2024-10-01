@@ -1,0 +1,12 @@
+{{define "nav"}}
+<div class="grid grid-rows-[auto_1fr]">
+	<div class="flex flex-row gap-2">
+		<a class='uk-button uk-button-ghost' href="#">test 1</a>
+		<a class='uk-button uk-button-ghost' href="#">test 1</a>
+		<a class='uk-button uk-button-ghost' href="#">test 1</a>
+	</div>
+	<div id="child">
+		{{template "children" .}}
+	</div>
+</div>
+{{end}}

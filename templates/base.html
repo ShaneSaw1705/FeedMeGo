@@ -15,9 +15,16 @@
 </head>
 
 <body>
-	<main id="child">
-		{{ template "children" .}}
-	</main>
+	<div class="grid grid-rows-[auto_1fr]">
+		<div class="flex flex-row gap-2">
+			<a class='uk-button uk-button-ghost' href="#">test 1</a>
+			<a class='uk-button uk-button-ghost' href="#">test 1</a>
+			<a class='uk-button uk-button-ghost' href="#">test 1</a>
+		</div>
+		<main id="child">
+			{{ template "children" .}}
+		</main>
+	</div>
 </body>
 
 </html>

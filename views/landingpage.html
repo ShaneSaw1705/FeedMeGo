@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>FeedMe - Your Ultimate Feedback App</title>
+	<style>
+		:root {
+			--background: 0 0% 100%;
+			--foreground: 222.2 84% 4.9%;
+			--card: 0 0% 100%;
+			--card-foreground: 222.2 84% 4.9%;
+			--popover: 0 0% 100%;
+			--popover-foreground: 222.2 84% 4.9%;
+			--primary: 221.2 83.2% 53.3%;
+			--primary-foreground: 210 40% 98%;
+			--secondary: 210 40% 96.1%;
+			--secondary-foreground: 222.2 47.4% 11.2%;
+			--muted: 210 40% 96.1%;
+			--muted-foreground: 215.4 16.3% 46.9%;
+			--accent: 210 40% 96.1%;
+			--accent-foreground: 222.2 47.4% 11.2%;
+			--destructive: 0 84.2% 60.2%;
+			--destructive-foreground: 210 40% 98%;
+			--border: 214.3 31.8% 91.4%;
+			--input: 214.3 31.8% 91.4%;
+			--ring: 221.2 83.2% 53.3%;
+			--radius: 0.5rem;
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			background-color: hsl(var(--background));
+			color: hsl(var(--foreground));
+			line-height: 1.5;
+			margin: 0;
+			padding: 0;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 2rem;
+		}
+
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1rem 0;
+		}
+
+		.logo {
+			font-size: 1.5rem;
+			font-weight: bold;
+			color: hsl(var(--primary));
+		}
+
+		nav a {
+			color: hsl(var(--foreground));
+			text-decoration: none;
+			margin-left: 1rem;
+		}
+
+		h1 {
+			font-size: 3rem;
+			margin-bottom: 1rem;
+		}
+
+		p {
+			font-size: 1.1rem;
+			color: hsl(var(--muted-foreground));
+			margin-bottom: 2rem;
+		}
+
+		.cta-button {
+			display: inline-block;
+			background-color: hsl(var(--primary));
+			color: hsl(var(--primary-foreground));
+			padding: 0.75rem 1.5rem;
+			border-radius: var(--radius);
+			text-decoration: none;
+			font-weight: 500;
+			transition: background-color 0.3s ease;
+		}
+
+		.cta-button:hover {
+			background-color: hsl(var(--primary) / 0.8);
+		}
+
+		.cta-secondary {
+			background-color: hsl(var(--secondary));
+			color: hsl(var(--secondary-foreground));
+		}
+
+		.cta-secondary:hover {
+			background-color: hsl(var(--secondary) / 0.8);
+		}
+
+		.features {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+			gap: 2rem;
+			margin-top: 4rem;
+		}
+
+		.feature {
+			background-color: hsl(var(--card));
+			padding: 2rem;
+			border-radius: var(--radius);
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		.feature h3 {
+			font-size: 1.5rem;
+			margin-bottom: 1rem;
+		}
+
+		footer {
+			margin-top: 4rem;
+			text-align: center;
+			color: hsl(var(--muted-foreground));
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<header>
+			<div class="logo">FeedMe</div>
+			<nav>
+				<a href="#features">Features</a>
+				<a href="#pricing">Pricing</a>
+				<a href="/auth">Login</a>
+			</nav>
+		</header>
+
+		<main>
+			<h1>Collect and Analyze Feedback with FeedMe</h1>
+			<p>Empower your business with real-time customer insights. FeedMe helps you gather, analyze, and act on
+				valuable feedback to improve your products and services.</p>
+			<a href="/auth" class="cta-button">Get Started</a>
+
+			<div class="features" id="features">
+				<div class="feature">
+					<h3>Easy Collection</h3>
+					<p>Gather feedback through customizable forms, surveys, and widgets that seamlessly integrate with
+						your website or app.</p>
+					<a href="/auth" class="cta-button cta-secondary">Try It Now</a>
+				</div>
+				<div class="feature">
+					<h3>Real-time Analytics</h3>
+					<p>Get instant insights with our powerful analytics dashboard. Visualize trends and make data-driven
+						decisions.</p>
+					<a href="/auth" class="cta-button cta-secondary">Explore Analytics</a>
+				</div>
+				<div class="feature">
+					<h3>Team Collaboration</h3>
+					<p>Work together efficiently by sharing feedback, assigning tasks, and tracking progress across your
+						team.</p>
+					<a href="/auth" class="cta-button cta-secondary">Start Collaborating</a>
+				</div>
+			</div>
+
+			<div id="pricing" style="margin-top: 4rem; text-align: center;">
+				<h2>Simple, Transparent Pricing</h2>
+				<p>Choose the plan that fits your needs. All plans include a 14-day free trial.</p>
+				<a href="/auth" class="cta-button">View Pricing Plans</a>
+			</div>
+		</main>
+
+		<footer>
+			<p>&copy; 2023 FeedMe. All rights reserved.</p>
+		</footer>
+	</div>
+</body>
+
+</html>

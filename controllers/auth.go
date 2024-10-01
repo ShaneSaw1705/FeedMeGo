@@ -5,7 +5,6 @@ import (
 	"feed-me/models"
 	"feed-me/services"
 	"fmt"
-	"html/template"
 	"net/http"
 	"os"
 	"time"
@@ -16,11 +15,8 @@ import (
 
 func HandleLoginPage(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		templ, err := template.New("login").ParseFiles("views/login.html", "templates/base.html")
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"Error": "Error parsing html files"})
-		}
-		templ.ExecuteTemplate(c.Writer, "base", gin.H{"Title": "Login"})
+		r.LoadHTMLFiles("views/login.html", "templates/base.html")
+		c.HTML(200, "base", gin.H{"Title": "Login"})
 	}
 }
 
@@ -35,31 +31,36 @@ func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 			return
 		}
 		fmt.Println(body)
+
+		// Load the toast template
 		r.LoadHTMLFiles("templates/toast.html")
+
+		// Create a new JWT token
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"sub": body.Email,
 			"exp": time.Now().Add(time.Hour * 1).Unix(),
 		})
 
+		// Sign the token
 		tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
 		if err != nil {
-			c.JSON(http.StatusFailedDependency, gin.H{
-				"Error": "failed to create jwt token",
-			})
+			c.JSON(http.StatusFailedDependency, gin.H{"Error": "failed to create jwt token"})
 			return
 		}
 		fmt.Println(tokenString)
-		err = services.SendMagicLink(body.Email, tokenString)
-		if err != nil {
-			fmt.Println(err)
-			c.HTML(200, "toast", gin.H{
-				"message": "<uk-icon icon='rocket'></uk-icon> Magic failed to send to: " + body.Email,
-				"status":  "primary",
-			})
-			return
-		}
-		c.HTML(200, "toast", gin.H{
-			"message": "<uk-icon icon='rocket'></uk-icon> Magic link sent to: " + body.Email,
+
+		// Send the email asynchronously
+		go func() {
+			err = services.SendMagicLink(body.Email, tokenString)
+			if err != nil {
+				// Log the error without attempting to send a response
+				fmt.Printf("Failed to send magic link to %s: %v\n", body.Email, err)
+			}
+		}()
+
+		// Respond immediately to the user
+		c.HTML(http.StatusOK, "toast", gin.H{
+			"message": "<uk-icon icon='rocket'></uk-icon> Magic link request received. Please check your email!",
 			"status":  "primary",
 		})
 	}
