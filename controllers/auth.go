@@ -112,7 +112,7 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 			}
 			createAuthToken(User, c)
 		}
-		c.Redirect(http.StatusFound, "/")
+		c.Redirect(http.StatusFound, os.Getenv("Frontend_Url")+"/")
 		return
 	}
 }
@@ -131,5 +131,5 @@ func createAuthToken(user models.UserModel, c *gin.Context) {
 		return
 	}
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("auth", tokenString, 3600*24, "", "", false, true)
+	c.SetCookie("auth", tokenString, 3600*24, "", os.Getenv("Frontend_Url"), false, true)
 }
