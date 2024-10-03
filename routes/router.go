@@ -2,6 +2,7 @@ package routes
 
 import (
 	"feed-me/controllers"
+	"feed-me/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,7 @@ func RegisterRoutes(r *gin.Engine) {
 		feed := api.Group("/feed")
 		{
 			feed.GET("/:id", controllers.HandleFeedById(r))
+			feed.POST("/create", middleware.CheckJwt, controllers.HandleCreateFeed(r))
 		}
 	}
 }
