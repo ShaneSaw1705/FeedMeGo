@@ -15,7 +15,7 @@ func SendMagicLink(address string, tokenString string) error {
 	plainTextContent := "Click the button below to log in."
 
 	// Format the magic link with the token
-	magicLink := fmt.Sprintf(os.Getenv("Email_Verify_Link")+"/auth/verify?token=%s", tokenString)
+	magicLink := fmt.Sprintf(os.Getenv("Email_Verify_Link")+"/api/auth/verify?token=%s", tokenString)
 
 	// HTML content with inline CSS for the button, and using the magic link
 	htmlContent := fmt.Sprintf(`

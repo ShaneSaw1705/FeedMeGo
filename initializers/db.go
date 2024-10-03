@@ -26,4 +26,6 @@ func ConnectDB() {
 
 func Migrate() {
 	DB.AutoMigrate(&models.UserModel{})
+	DB.AutoMigrate(&models.Feed{})
+	DB.AutoMigrate(&models.Form{})
 }

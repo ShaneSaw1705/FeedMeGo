@@ -23,7 +23,7 @@ func HandleLoginPage(r *gin.Engine) gin.HandlerFunc {
 func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body struct {
-			Email string `form:"email"`
+			Email string `json:"email"`
 		}
 		err := c.Bind(&body)
 		if err != nil {
@@ -59,10 +59,7 @@ func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 		}()
 
 		// Respond immediately to the user
-		c.HTML(http.StatusOK, "toast", gin.H{
-			"message": "<uk-icon icon='rocket'></uk-icon> Magic link request received. Please check your email!",
-			"status":  "primary",
-		})
+		c.JSON(200, gin.H{"message": "email has been sent to" + body.Email})
 	}
 }
 
@@ -115,7 +112,7 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 			}
 			createAuthToken(User, c)
 		}
-		c.Redirect(http.StatusFound, "/")
+		c.Redirect(http.StatusFound, os.Getenv("FrontEndUrl")+"/")
 		return
 	}
 }
@@ -134,5 +131,5 @@ func createAuthToken(user models.UserModel, c *gin.Context) {
 		return
 	}
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("auth", tokenString, 3600*24, "", "", false, true)
+	c.SetCookie("auth", tokenString, 3600*24, "", os.Getenv("FrontEndUrl"), false, true)
 }
