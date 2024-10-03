@@ -15,5 +15,9 @@ func RegisterRoutes(r *gin.Engine) {
 			auth.POST("/", controllers.HandleLoginLogic(r))
 			auth.GET("/verify", controllers.HandleVerify(r))
 		}
+		feed := api.Group("/feed")
+		{
+			feed.GET("/:id", controllers.HandleFeedById(r))
+		}
 	}
 }

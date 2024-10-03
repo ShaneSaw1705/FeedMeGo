@@ -6,13 +6,13 @@ import (
 
 type Feed struct {
 	gorm.Model
-	authorId string
-	title    string
-	secret   string
+	AuthorId int
+	Title    string
+	Secret   string
 }
 
 type Form struct {
 	gorm.Model
-	feedId int
-	feed   Feed
+	FeedId int
+	Feed   Feed
 }
