@@ -7,7 +7,6 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	r.LoadHTMLFiles("views/error.html")
 	api := r.Group("/api")
 	{
 		auth := api.Group("/auth")
