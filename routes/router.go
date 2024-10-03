@@ -20,6 +20,7 @@ func RegisterRoutes(r *gin.Engine) {
 		{
 			feed.GET("/:id", controllers.HandleFeedById(r))
 			feed.POST("/create", middleware.CheckJwt, controllers.HandleCreateFeed(r))
+
 		}
 	}
 }

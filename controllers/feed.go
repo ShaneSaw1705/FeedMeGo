@@ -20,7 +20,7 @@ func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user, err := helpers.GetCurrentUser(c)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"Error": fmt.Sprintf("Error fetching current user: %s", err)})
+			c.JSON(http.StatusBadRequest, gin.H{"Message": fmt.Sprintf("Error fetching current user: %s", err)})
 			return
 		}
 		var ResponseBody struct {
@@ -29,7 +29,7 @@ func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 
 		err = c.Bind(&ResponseBody)
 		if err != nil {
-			c.JSON(http.StatusFailedDependency, gin.H{"Error": fmt.Sprintf("an error occured %s", err)})
+			c.JSON(http.StatusFailedDependency, gin.H{"Message": fmt.Sprintf("an error occured %s", err)})
 			return
 		}
 		feed := models.Feed{
@@ -38,7 +38,7 @@ func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 		}
 		res := initializers.DB.Create(&feed)
 		if res.Error != nil {
-			c.JSON(http.StatusFailedDependency, gin.H{"Error": fmt.Sprintf("There was an error creating the feed: %s", res.Error)})
+			c.JSON(http.StatusFailedDependency, gin.H{"Message": fmt.Sprintf("There was an error creating the feed: %s", res.Error)})
 			return
 		}
 		c.JSON(200, gin.H{"Message": "created feed sucessfully"})
