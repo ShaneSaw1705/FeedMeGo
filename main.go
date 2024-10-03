@@ -16,7 +16,6 @@ func init() {
 
 func main() {
 	r := gin.Default()
-
 	routes.RegisterRoutes(r)
 
 	r.Run(os.Getenv("port"))
