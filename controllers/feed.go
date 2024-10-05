@@ -16,7 +16,7 @@ func HandleFeedById(r *gin.Engine) gin.HandlerFunc {
 	}
 }
 
-func handleUserFeeds(c *gin.Context) {
+func HandleUserFeeds(c *gin.Context) {
 	id := c.Param("id")
 	user, err := helpers.GetCurrentUser(c)
 	if err != nil {
