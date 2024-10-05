@@ -16,6 +16,27 @@ func HandleFeedById(r *gin.Engine) gin.HandlerFunc {
 	}
 }
 
+func handleUserFeeds(c *gin.Context) {
+	id := c.Param("id")
+	user, err := helpers.GetCurrentUser(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Message": "there was an error with the get address"})
+		return
+	}
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"Message": "there was an error with the get address"})
+		return
+	}
+	var feeds []models.Feed
+	res := initializers.DB.Find(&feeds, "AuthorId = ?", user.ID)
+	if res.Error != nil {
+		c.JSON(http.StatusFailedDependency, gin.H{"Message": "failed to fetch from database"})
+		return
+
+	}
+	c.JSON(http.StatusOK, gin.H{"Feeds": feeds})
+}
+
 func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user, err := helpers.GetCurrentUser(c)

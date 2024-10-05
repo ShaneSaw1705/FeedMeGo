@@ -19,6 +19,7 @@ func RegisterRoutes(r *gin.Engine) {
 		feed := api.Group("/feed")
 		{
 			feed.GET("/:id", controllers.HandleFeedById(r))
+			feed.GET("/all/:id", controllers.HandleUserFeeds(r))
 			feed.POST("/create", middleware.CheckJwt, controllers.HandleCreateFeed(r))
 
 		}
