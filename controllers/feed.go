@@ -17,23 +17,20 @@ func HandleFeedById(r *gin.Engine) gin.HandlerFunc {
 }
 
 func HandleUserFeeds(c *gin.Context) {
-	id := c.Param("id")
 	user, err := helpers.GetCurrentUser(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"Message": "there was an error with the get address"})
-		return
-	}
-	if id == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"Message": "there was an error with the get address"})
+		fmt.Printf("Error occured: %s", err)
 		return
 	}
 	var feeds []models.Feed
-	res := initializers.DB.Find(&feeds, "AuthorId = ?", user.ID)
+	res := initializers.DB.Find(&feeds, "author_id = ?", user.ID)
 	if res.Error != nil {
 		c.JSON(http.StatusFailedDependency, gin.H{"Message": "failed to fetch from database"})
 		return
 
 	}
+	fmt.Print(feeds)
 	c.JSON(http.StatusOK, gin.H{"Feeds": feeds})
 }
 
