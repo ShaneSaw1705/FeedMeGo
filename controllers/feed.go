@@ -82,10 +82,39 @@ func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 }
 
 func HandleDeleteFeed(c *gin.Context) {
-	//TODO: Add delete method
-	user, err := helpers.GetCurrentUser(c)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"Message": "youre not authorized to delete this feed"})
+	feedId := c.Param("id")
+	if feedId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"Message": "Error, param id not found"})
 		return
 	}
+
+	user, err := helpers.GetCurrentUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"Message": "You're not authorized to delete this feed"})
+		return
+	}
+
+	var feed models.Feed
+	res := initializers.DB.First(&feed, "id = ?", feedId)
+	if res.Error != nil {
+		if res.RowsAffected == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"Message": "Feed not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to fetch feed from database"})
+		}
+		return
+	}
+
+	if feed.AuthorId != int(user.ID) {
+		c.JSON(http.StatusUnauthorized, gin.H{"Message": "You're not authorized to delete this feed"})
+		return
+	}
+
+	res = initializers.DB.Delete(&feed)
+	if res.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "There was an error deleting the feed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"Message": "Feed deleted successfully"})
 }
