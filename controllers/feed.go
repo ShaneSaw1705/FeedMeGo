@@ -80,3 +80,7 @@ func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 		c.JSON(200, gin.H{"Message": "created feed sucessfully"})
 	}
 }
+
+func HandleDeleteFeed(c *gin.Context) {
+	//TODO: Add delete method
+}
