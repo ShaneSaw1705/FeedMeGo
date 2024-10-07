@@ -83,4 +83,9 @@ func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 
 func HandleDeleteFeed(c *gin.Context) {
 	//TODO: Add delete method
+	user, err := helpers.GetCurrentUser(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"Message": "youre not authorized to delete this feed"})
+		return
+	}
 }
