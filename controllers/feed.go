@@ -49,7 +49,7 @@ func HandleUserFeeds(c *gin.Context) {
 
 	}
 	fmt.Print(feeds)
-	c.JSON(http.StatusOK, gin.H{"Feeds": feeds})
+	c.JSON(http.StatusOK, feeds)
 }
 
 func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
