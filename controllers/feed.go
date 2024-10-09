@@ -31,7 +31,7 @@ func HandleFeedById(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"Message": "You are not autherized to access this feed"})
 		return
 	}
-	c.JSON(200, gin.H{"feed": feed})
+	c.JSON(200, feed)
 }
 
 func HandleUserFeeds(c *gin.Context) {
@@ -49,7 +49,7 @@ func HandleUserFeeds(c *gin.Context) {
 
 	}
 	fmt.Print(feeds)
-	c.JSON(http.StatusOK, gin.H{"Feeds": feeds})
+	c.JSON(http.StatusOK, feeds)
 }
 
 func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {

@@ -112,7 +112,7 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 			}
 			createAuthToken(User, c)
 		}
-		c.Redirect(http.StatusFound, os.Getenv("FrontEndUrl")+"/")
+		c.Redirect(http.StatusFound, os.Getenv("FrontEndUrl")+"/dashboard")
 		return
 	}
 }
