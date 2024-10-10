@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Fetch feed by id
 func HandleFeedById(c *gin.Context) {
 	feedId := c.Param("id")
 	if feedId == "" {
@@ -34,6 +35,7 @@ func HandleFeedById(c *gin.Context) {
 	c.JSON(200, feed)
 }
 
+// Fetch all the feeds from a single user
 func HandleUserFeeds(c *gin.Context) {
 	user, err := helpers.GetCurrentUser(c)
 	if err != nil {
@@ -52,6 +54,7 @@ func HandleUserFeeds(c *gin.Context) {
 	c.JSON(http.StatusOK, feeds)
 }
 
+// Create a feed
 func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user, err := helpers.GetCurrentUser(c)
@@ -81,6 +84,7 @@ func HandleCreateFeed(r *gin.Engine) gin.HandlerFunc {
 	}
 }
 
+// Delete a feed
 func HandleDeleteFeed(c *gin.Context) {
 	feedId := c.Param("id")
 	if feedId == "" {
