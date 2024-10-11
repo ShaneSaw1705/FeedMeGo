@@ -13,6 +13,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// Depricated
 func HandleLoginPage(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		r.LoadHTMLFiles("views/login.html", "templates/base.html")
@@ -20,6 +21,7 @@ func HandleLoginPage(r *gin.Engine) gin.HandlerFunc {
 	}
 }
 
+// Initial login request
 func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body struct {
@@ -63,6 +65,7 @@ func HandleLoginLogic(r *gin.Engine) gin.HandlerFunc {
 	}
 }
 
+// Verify from Gmail
 func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		r.LoadHTMLFiles("views/error.html")
@@ -117,6 +120,7 @@ func HandleVerify(r *gin.Engine) gin.HandlerFunc {
 	}
 }
 
+// Create cookie auth token
 func createAuthToken(user models.UserModel, c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.ID,
